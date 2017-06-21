@@ -1,0 +1,36 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Itens Cadastrados
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="filtrar()">
+        <ion-icon name="ios-funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngIf="itens?.length > 0">
+      <ion-label>Categorias</ion-label>
+      <ion-select [(ngModel)]="categoriaSelecionada" (ionChange)="onSelectCategoria()" >
+        <ion-option value="" >Todas</ion-option>
+        <ion-option *ngFor="let categoria of categorias" [value]="categoria.$key">{{categoria.descricao}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div *ngIf="itens?.length <= 0 && !carregando" >
+      <h5 text-center >Nenhum item cadastrado</h5>
+    </div>
+    <ion-item *ngFor="let item of itensFiltrados" (click)="editItem(item)" >
+      {{item.descricao}}
+      <p>{{item.preco | currency:'BRL':true}}</p>
+    </ion-item>
+  </ion-list>
+  <ion-fab bottom right >
+    <button ion-fab (click)="cadastrar()" ><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>

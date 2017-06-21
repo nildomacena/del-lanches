@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Categorias</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div *ngIf="categorias?.length <= 0 && !carregando" >
+    <h5 text-center >Nenhuma categoria cadastrada</h5>
+  </div>
+  <a>
+    <ion-list>
+      <ion-item *ngFor="let categoria of categorias" (click)="editCategoria(categoria)" >
+        {{categoria.descricao}}
+        
+      </ion-item>
+    </ion-list>
+  </a>
+  <ion-fab bottom right >
+    <button ion-fab (click)="cadastrar()" ><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>

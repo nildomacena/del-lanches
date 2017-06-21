@@ -1,1 +1,23 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content"  >
+  <ion-content class="menu-left">
+    <div text-center padding-top padding-bottom class="primary-bg menu-left">
+      <a menuClose>
+        <div>
+          <h4 light>Del Lanches</h4>
+          <hr>
+          <ion-list class="list-full-border">
+            <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+                {{p.titulo}}
+            </button>
+          </ion-list>
+        </div>
+      </a>
+    </div>
+    <div menuClose class="contato" padding-left (click)="goToContato()" >
+      <p><b>Entre em contato</b></p>
+    </div>
+
+  </ion-content>
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
