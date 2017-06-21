@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { HomePage } from './../home/home';
+import { FireService } from './../../providers/fire';
+import { Component, NgZone } from '@angular/core';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, LoadingController, AlertController } from 'ionic-angular';
 
-/**
- * Generated class for the MesaPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-mesa',
@@ -14,12 +10,166 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MesaPage {
   mesa: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  itens: any[] = [];
+  total: number = 0;
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public fire: FireService,
+    public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    public zone: NgZone
+    ) {
     this.mesa = this.navParams.get('mesa');
+    if(!this.mesa){
+      this.navCtrl.setRoot(HomePage);
+    }
+    
+    else{
+      if(this.mesa.comanda_aberta){
+        // Import the AlertController from ionic package 
+        // Consume it in the constructor as 'alertCtrl' 
+        let alert = this.alertCtrl.create({
+          title: 'Mesa com comanda aberta',
+          message: 'Esta mesa tem uma comanda aberta. Deseja continuar o atendimento ou limpar a comanda?',
+          buttons: [
+            {
+            text: 'Continuar atendimento', role: 'cancel',
+            handler: () => {
+              this.getMesa();
+            }
+            }, {
+              text: 'Limpar comanda',
+              handler: () => {
+              this.limpar();
+              this.getMesa();
+            }
+            }
+          ]
+        });
+        alert.present();
+      }
+      
+      }
   }
 
+  getMesa(){
+     this.fire.getMesa(this.mesa.$key)
+        .subscribe(mesa => {
+          this.mesa = mesa;
+          console.log(this.mesa);
+          if(this.mesa.comanda_aberta)
+            this.updateComanda();
+        })
+  }
+  updateComanda(){
+    console.log('updatecomanda()')
+    this.itens = [];
+    this.total = 0;
+    if(this.mesa.comanda_aberta){
+      this.zone.run(() => {
+        Object.keys(this.mesa.comanda_aberta.itens).map((key,index) => {
+          this.itens.push(this.mesa.comanda_aberta.itens[key]);
+          this.itens[index]['key'] = key;
+          this.total += this.mesa.comanda_aberta.itens[key].preco;
+        })
+      })
+    }
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad MesaPage');
   }
 
+  limpar(){
+    let alert = this.alertCtrl.create({
+      title: 'Limpar comanda',
+      message: 'Deseja realmente limpar a comanda?',
+      buttons: [
+        {
+        text: 'Cancel', role: 'cancel',
+        handler: () => {
+            console.log('Cancel clicked');
+          }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            this.fire.limparComanda(this.mesa.$key)
+              .then(_ => {
+                this.itens = [];
+                this.total = 0;
+                let toast = this.toastCtrl.create({
+                  message: 'Comanda limpa',
+                  duration: 2500,
+                  showCloseButton: true,
+                  closeButtonText: 'x'
+                });
+                toast.present();
+              })
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  hold(){
+    console.log('hold')
+  }
+
+  deleteItem(item){
+    this.fire.deletarItemComanda(this.mesa.$key, item.key)
+      .then(_ => {
+        console.log('Item excluído')
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  }
+
+  adicionarItem(){
+    let modal = this.modalCtrl.create('ItemPage',{adicionar: true});
+    modal.present();
+    modal.onDidDismiss(data => {
+      console.log(data);
+      this.fire.adicionarItemComanda(this.mesa.$key,data.item)
+        .then(snap => {
+          console.log('após adicionar item a comanda',snap);
+
+        })
+    })
+  }
+
+  fecharComanda(){ 
+    let alert = this.alertCtrl.create({
+      title: 'Fechar comanda',
+      message: 'Tem certeza que deseja fechar a comanda?<br>Valor total: '+this.total+'?',
+      buttons: [
+        {
+        text: 'Cancel', role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            this.fire.fecharComanda(this.mesa,this.total)
+              .then(_ => {
+                let toast = this.toastCtrl.create({
+                  message: 'Pedido enviado para a cozinha',
+                  duration: 2500,
+                  showCloseButton: true,
+                  closeButtonText: 'x'
+                });
+                toast.present();
+                this.navCtrl.setRoot(HomePage);
+              })
+          }
+        }
+      ]
+    });
+    alert.present();
+    
+  }
 }

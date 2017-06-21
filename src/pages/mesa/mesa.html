@@ -2,25 +2,43 @@
 
   <ion-navbar>
     <ion-title>Mesa {{mesa?.descricao}}</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only  (click)="limpar()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <!--<h6 text-center>Itens solicitados</h6>-->
-  <ion-list>
+  <h6 text-center *ngIf="itens.length == 0" >Nenhum adicionado</h6>
+  <ion-list *ngIf="itens.length > 0" > 
     <ion-list-header>
       Itens solicitados
     </ion-list-header>
-    <ion-item>
-      Passaporte de carne
-      <ion-note item-end>R$10,00</ion-note>
-    </ion-item>
-    <ion-item>
-      Passaporte de frango
-      <ion-note item-end>R$10,00</ion-note>
-    </ion-item>
+    <ion-item-sliding *ngFor="let item of itens">
+      <ion-item (press)="hold()" >
+        {{item.descricao}}
+        <ion-note item-end>{{item.preco | currency:'BRL':true}}</ion-note>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button icon-only color="danger" (click)="deleteItem(item)" >
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
-  <h6 text-right>Total: R$20,00</h6>
+  <h6 text-right *ngIf="itens.length > 0" >Total:{{total | currency:'BRL':true}}</h6>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-2></ion-col>
+      <ion-col col-8><button ion-button full (click)="adicionarItem()" >Adicionar item</button></ion-col>
+      <ion-col col-2></ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-fab bottom right >
+    <button ion-fab (click)="fecharComanda()" ><ion-icon name="checkmark"></ion-icon></button>
+  </ion-fab>
 </ion-content>

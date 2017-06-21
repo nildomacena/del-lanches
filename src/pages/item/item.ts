@@ -1,6 +1,6 @@
 import { FireService } from './../../providers/fire';
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController, LoadingController, Loading, Select } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, LoadingController, Loading, Select, ViewController } from 'ionic-angular';
 
 
 @IonicPage()
@@ -11,19 +11,24 @@ import { IonicPage, NavController, NavParams, ModalController, ToastController, 
 export class ItemPage {
   @ViewChild(Select) select: Select;
   itens: any[];
+  itemSelecionado: any;
   categorias: any[];
   carregando: boolean = true;
   loading: Loading;
   categoriaSelecionada: any;
   itensFiltrados: any[];
+  adicionandoItem: boolean = false;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public fire: FireService,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public viewCtrl: ViewController
     ) {
+      this.adicionandoItem = this.navParams.get('adicionar');
+      console.log(this.adicionandoItem);
   }
 
   ionViewDidLoad() {
@@ -50,8 +55,16 @@ export class ItemPage {
       })
   }
 
+  addItem(item:any){
+    this.viewCtrl.dismiss({item:this.itemSelecionado});
+  }
+
   filtrar(){
 
+  }
+  onSelectItem(item){
+    this.itemSelecionado = item;
+    console.log(this.itemSelecionado);
   }
 
   editItem(item){
