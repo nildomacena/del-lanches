@@ -3,14 +3,19 @@
     <div text-center padding-top padding-bottom class="primary-bg menu-left">
       <a menuClose>
         <div>
-          <h4 light>Del Lanches</h4>
+          <h4 light *ngIf="!logado" (click)="acessarSistema()" >Acesso restrito</h4>
           <hr>
-          <ion-list class="list-full-border">
+          <ion-list class="list-full-border" *ngIf="logado" >
             <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
                 {{p.titulo}}
             </button>
             <button menuClose ion-item (click)="sair()">
                 Sair
+            </button>
+          </ion-list>
+          <ion-list class="list-full-border" *ngIf="!logado">
+            <button menuClose ion-item (click)="goToMenu()">
+                Menu
             </button>
           </ion-list>
         </div>

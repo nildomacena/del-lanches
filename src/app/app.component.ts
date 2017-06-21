@@ -11,9 +11,10 @@ import { HomePage } from '../pages/home/home';
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage:any = 'LoginPage';
+  rootPage:any = 'MenuPage';
+  logado: boolean = false;
   pages: any[];
-
+  user: any;
   constructor(
     platform: Platform, statusBar: StatusBar, 
     splashScreen: SplashScreen,
@@ -22,17 +23,29 @@ export class MyApp {
     public loadingCtrl: LoadingController
     ) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+      
+      this.fire.user.subscribe(dados => {
+        console.log(dados);
+        if(dados){
+          this.nav.setRoot(HomePage);
+          this.logado = true
+        }
+        else{
+          this.logado = false;
+          console.log('Não está logado');
+        }
+      })
       let loading = this.loadingCtrl.create({
         content: 'Aguarde...'
       })
+      /*
       this.fire.checarUsuario()
         .then(logado => {
           loading.dismiss();
+          this.logado = logado;
           if(logado)
             this.nav.setRoot(HomePage);
-        })
+        })*/
       this.pages = [
         {titulo: 'Categorias', component: 'CategoriaPage'},
         {titulo: 'Itens', component: 'ItemPage'},
@@ -48,6 +61,12 @@ export class MyApp {
       .then(_ => {
         this.nav.setRoot('LoginPage')
       })
+  }
+  acessarSistema(){
+    this.nav.setRoot('LoginPage');
+  }
+  goToMenu(){
+    this.nav.setRoot('MenuPage');
   }
   openPage(page){
     this.nav.push(page.component);

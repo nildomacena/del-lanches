@@ -14,7 +14,7 @@ export class FireService {
     public db: AngularFireDatabase,
     public afAuth: AngularFireAuth
     ) {
-
+      this.user = this.afAuth.authState;
   }
 
   criarUsuario(email, password){
