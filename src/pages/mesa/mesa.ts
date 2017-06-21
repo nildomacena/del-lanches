@@ -1,7 +1,7 @@
 import { HomePage } from './../home/home';
 import { FireService } from './../../providers/fire';
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ToastController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController, LoadingController, AlertController, ActionSheetController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -20,6 +20,7 @@ export class MesaPage {
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
+    public actionSheetCtrl: ActionSheetController,
     public zone: NgZone
     ) {
     this.mesa = this.navParams.get('mesa');
@@ -114,9 +115,43 @@ export class MesaPage {
     });
     alert.present();
   }
+  
+  abrirActionSheet(){
+    let action = this.actionSheetCtrl.create({
+      title: 'Carrinho',
+      buttons: [
+        {
+         text: 'Limpar carrinho',
+         role: 'destructive',
+         icon: 'trash',
+         handler: () => {
+           this.limpar()
+         }
+        },
+        {
+         text: 'Imprimir comanda',
+         role: 'destructive',
+         icon: 'print',
+         handler: () => {
+           this.imprimir()
+         }
+        }
+      ]
+    })
+    action.present();
+  
+  }
 
-  hold(){
-    console.log('hold')
+  
+  imprimir(){
+    let toast = this.toastCtrl.create({
+      message: 'Impresso',
+      duration: 2500,
+      showCloseButton: true,
+      closeButtonText: 'x'
+    });
+    toast.present();
+    this.navCtrl.pop();
   }
 
   deleteItem(item, hold:boolean){

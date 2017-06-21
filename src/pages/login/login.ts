@@ -1,4 +1,4 @@
-import { Keyboard } from '@ionic-native/keyboard';
+import { Keyboard } from '@ionic-native/Keyboard';
 import { FireService } from './../../providers/fire';
 import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
@@ -18,12 +18,11 @@ export class LoginPage {
     public navParams: NavParams,
     public fire: FireService,
     public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
-    public keyboard: Keyboard
+    public loadingCtrl: LoadingController
     ) {
   }
   ionViewDidEnter(){
-    this.keyboard.disableScroll(true);
+
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
