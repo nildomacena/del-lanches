@@ -28,6 +28,7 @@ export class MesaPage {
     }
     
     else{
+      this.getMesa();
       if(this.mesa.comanda_aberta){
         // Import the AlertController from ionic package 
         // Consume it in the constructor as 'alertCtrl' 
@@ -38,13 +39,13 @@ export class MesaPage {
             {
             text: 'Continuar atendimento', role: 'cancel',
             handler: () => {
-              this.getMesa();
+             
             }
             }, {
               text: 'Limpar comanda',
               handler: () => {
               this.limpar();
-              this.getMesa();
+              //this.getMesa();
             }
             }
           ]
@@ -118,14 +119,46 @@ export class MesaPage {
     console.log('hold')
   }
 
-  deleteItem(item){
-    this.fire.deletarItemComanda(this.mesa.$key, item.key)
-      .then(_ => {
-        console.log('Item excluído')
+  deleteItem(item, hold:boolean){
+    if(hold){
+      let alert = this.alertCtrl.create({
+        title: 'Excluir item',
+        message: 'Deseja excluir o item' +item.descricao+'?',
+        buttons: [
+          {
+          text: 'Cancel', role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+          }, {
+            text: 'Ok',
+            handler: () => {
+              this.zone.run(() => {
+                this.fire.deletarItemComanda(this.mesa.$key, item.key)
+                  .then(_ => {
+                    console.log('Item excluído')
+                  })
+                  .catch(err => {
+                    console.error(err);
+                  })
+              })
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+    else{
+      this.zone.run(() => {
+        this.fire.deletarItemComanda(this.mesa.$key, item.key)
+          .then(_ => {
+            console.log('Item excluído')
+          })
+          .catch(err => {
+            console.error(err);
+          })
       })
-      .catch(err => {
-        console.error(err);
-      })
+    }
   }
 
   adicionarItem(){
@@ -133,11 +166,15 @@ export class MesaPage {
     modal.present();
     modal.onDidDismiss(data => {
       console.log(data);
-      this.fire.adicionarItemComanda(this.mesa.$key,data.item)
-        .then(snap => {
-          console.log('após adicionar item a comanda',snap);
+      if(data){
+        this.zone.run(() => {
+          this.fire.adicionarItemComanda(this.mesa.$key,data.item)
+            .then(snap => {
+              console.log('após adicionar item a comanda',snap);
 
+            })
         })
+      }
     })
   }
 

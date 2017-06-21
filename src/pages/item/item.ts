@@ -59,8 +59,8 @@ export class ItemPage {
     this.viewCtrl.dismiss({item:this.itemSelecionado});
   }
 
-  filtrar(){
-
+  dismiss(){
+    this.viewCtrl.dismiss();
   }
   onSelectItem(item){
     this.itemSelecionado = item;

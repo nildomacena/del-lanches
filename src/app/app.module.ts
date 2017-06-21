@@ -1,3 +1,4 @@
+import { Keyboard } from '@ionic-native/keyboard';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -34,7 +35,10 @@ const config = {
     AngularFireModule.initializeApp(config),
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      scrollAssist: false, 
+      autoFocusAssist: false
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -44,6 +48,7 @@ const config = {
   providers: [
     StatusBar,
     SplashScreen,
+    Keyboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FireService,
     Util

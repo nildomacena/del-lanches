@@ -18,7 +18,7 @@ export class HomePage {
 
   listarMesas(){
     this.fire.listarMesas()
-      .then(mesas => {
+      .subscribe(mesas => {
         this.mesas = mesas;
       })
   }

@@ -1,18 +1,46 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/first';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Injectable()
 export class FireService {
-
+  user: Observable<firebase.User>;
   constructor(
-    public db: AngularFireDatabase
+    public db: AngularFireDatabase,
+    public afAuth: AngularFireAuth
     ) {
 
   }
 
+  criarUsuario(email, password){
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  checarUsuario(){
+    console.log(this.afAuth.auth.currentUser)
+    let promise: Promise<boolean>
+    promise = new Promise((resolve,reject) => {
+      setTimeout(() => {
+        if(this.afAuth.auth.currentUser)
+          resolve(true);
+        else 
+          resolve(false)
+      }, 500);
+    })
+    return promise;
+  }
+  logar(email, password){
+    return this.afAuth.auth.signInWithEmailAndPassword(email,password);
+  }
+
+  logout(){
+    return this.afAuth.auth.signOut();
+  }
   salvarCategoria(categoria){
     return this.db.list('categorias').push({descricao: categoria})
   }
@@ -49,7 +77,7 @@ export class FireService {
   }
 
   listarMesas(){
-    return this.db.list('mesas').first().toPromise();
+    return this.db.list('mesas');
   }
 
   listarCategorias(){

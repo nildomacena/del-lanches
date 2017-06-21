@@ -19,7 +19,7 @@
       Itens solicitados
     </ion-list-header>
     <ion-item-sliding *ngFor="let item of itens">
-      <ion-item (press)="hold()" >
+      <ion-item (press)="deleteItem(item, true)" >
         {{item.descricao}}
         <ion-note item-end>{{item.preco | currency:'BRL':true}}</ion-note>
       </ion-item>
