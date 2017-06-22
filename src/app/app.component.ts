@@ -1,7 +1,7 @@
 import { Keyboard } from '@ionic-native/keyboard';
 import { FireService } from './../providers/fire';
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav, LoadingController } from 'ionic-angular';
+import { Platform, Nav, LoadingController, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -20,7 +20,8 @@ export class MyApp {
     splashScreen: SplashScreen,
     keyboard: Keyboard,
     public fire: FireService,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public app: App
     ) {
     platform.ready().then(() => {
       
@@ -49,7 +50,6 @@ export class MyApp {
       this.pages = [
         {titulo: 'Categorias', component: 'CategoriaPage'},
         {titulo: 'Itens', component: 'ItemPage'},
-        {titulo: 'Menu (teste)', component: 'MenuPage'}
       ]
       keyboard.disableScroll(true);
       statusBar.styleDefault();
@@ -62,11 +62,17 @@ export class MyApp {
         this.nav.setRoot('LoginPage')
       })
   }
-  acessarSistema(){
-    this.nav.setRoot('LoginPage');
+  openMenu(){
+    this.app.getRootNav().push('MenuPage')
+  }
+  goToInicio(){
+    this.nav.setRoot(HomePage);
   }
   goToMenu(){
     this.nav.setRoot('MenuPage');
+  }
+  acessarSistema(){
+    this.nav.setRoot('LoginPage');
   }
   openPage(page){
     this.nav.push(page.component);

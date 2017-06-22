@@ -9,54 +9,62 @@
 
 <ion-content padding>
   <ion-list>
+    <ion-item *ngFor="let item of itens">
+      <ion-avatar item-start (click)="abrirImagem(item)" >
+        <ion-img [src]="item.imagem"></ion-img>
+      </ion-avatar>
+      <h2 (click)="openDetail(item)" >{{item.descricao}}</h2>
+      <p (click)="openDetail(item)">{{item.detalhes}}</p>
+      <ion-note item-end (click)="openDetail()">{{item.preco | currency:'BRL':true}}</ion-note>
+    </ion-item>
+    <!--<ion-item>
+      <ion-avatar item-start>
+        <ion-img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y"></ion-img>
+      </ion-avatar>
+      <h2 (click)="openDetail()" >X-Burger</h2>
+      <p (click)="openDetail()">Pão, hambúrguer, queijo, presunto e salada</p>
+      <ion-note item-end (click)="openDetail()">R$ 10.00</ion-note>
+    </ion-item>
     <ion-item>
       <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
+        <ion-img src="http://www.arenaparque.com/loja/image/cache/data/download-600x600.jpg"></ion-img>
       </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
+      <h2>X-Alcatra</h2>
+      <p>Pão, Alcatra, queijo, presunto e salada</p>
+      <ion-note item-end>R$ 14.00</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <ion-img src="http://sandubadocareca.podepedir.com.br/uploads/podepedir-sanduba-de-frango-desfiado-19-577ef78839362.png"></ion-img>
+      </ion-avatar>
+      <h2>X-Frango</h2>
+      <p>Pão, frango desfiado, queijo, presunto e salada</p>
+      <ion-note item-end>R$ 13.00</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <ion-img src="http://sandubadocareca.podepedir.com.br/uploads/podepedir-sanduba-de-picanha-argentina-55-577faea519b38.png"></ion-img>
+      </ion-avatar>
+      <h2>X-Picanha</h2>
+      <p>Pão, picanha, queijo, presunto e salada</p>
+      <ion-note item-end>R$ 17.00</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <ion-img src="http://blog.tnh1.com.br/nidelins/wp-content/uploads/2015/07/blog-passaporte-gaucho21.jpg"></ion-img>
+      </ion-avatar>
+      <h2>Passaporte de carne</h2>
+      <p>Pão seda, carne moída, salsicha e verdura</p>
       <ion-note item-end>R$ 10.00</ion-note>
     </ion-item>
     <ion-item>
       <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
+        <ion-img src="http://blog.tnh1.com.br/nidelins/wp-content/uploads/2015/07/blog-passaporte-gaucho1.jpg"></ion-img>
       </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
+      <h2>Passaporte de frango</h2>
+      <p>Pão seda, frango desfiado, salsicha e verdura</p>
       <ion-note item-end>R$ 10.00</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
-      </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
-      <ion-note item-end>R$ 10.00</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
-      </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
-      <ion-note item-end>R$ 10.00</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
-      </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
-      <ion-note item-end>R$ 10.00</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="http://painel.perdigao.com.br/panel/sites/default/files/styles/is_product_cover_mob_750_823/public/recipes-images/duplo-x-burger.png?itok=RnHhGv5Y">
-      </ion-avatar>
-      <h2>X-Burger</h2>
-      <p>Pão, hambúrguer, queijo, presunto e salada</p>
-      <ion-note item-end>R$ 10.00</ion-note>
-    </ion-item>
+    </ion-item>-->
   </ion-list>
   <br>
   <ion-fab bottom right >

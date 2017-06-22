@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { CallNumber } from '@ionic-native/call-number'
 
-/**
- * Generated class for the Tab3Page page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+
 @IonicPage()
 @Component({
   selector: 'page-tab3',
@@ -14,11 +10,38 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class Tab3Page {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public callNumber:CallNumber,
+    public alertCtrl: AlertController
+    ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Tab3Page');
   }
 
+  ligar(){
+    // Import the AlertController from ionic package 
+    // Consume it in the constructor as 'alertCtrl' 
+    let alert = this.alertCtrl.create({
+      title: 'Confirmação',
+      message: 'Deseja ligar para nosso estabelecimento?',
+      buttons: [
+        {
+        text: 'Cancelar', role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            this.callNumber.callNumber('33247510',false)
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 }
